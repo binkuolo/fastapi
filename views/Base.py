@@ -7,15 +7,11 @@
 from fastapi import APIRouter
 from starlette.responses import HTMLResponse
 
-from views.home import home
+from views.home import home, result_page, reg_page
 
 ViewsRouter = APIRouter()
 
 
 ViewsRouter.get("/items/{id}", response_class=HTMLResponse)(home)
-
-
-# async def read_item():
-#     # return templates.get_template("index.html").render({"request": request, "id": id})
-#     # print(request.app.state.views)
-
+ViewsRouter.get("/reg", response_class=HTMLResponse)(reg_page)
+ViewsRouter.post("/reg/form", response_class=HTMLResponse)(result_page)
