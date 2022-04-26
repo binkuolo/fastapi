@@ -12,6 +12,6 @@ from views.home import home, result_page, reg_page
 ViewsRouter = APIRouter()
 
 
-ViewsRouter.get("/items/{id}", response_class=HTMLResponse)(home)
+ViewsRouter.get("/home", response_class=HTMLResponse)(home)
 ViewsRouter.get("/reg", response_class=HTMLResponse)(reg_page)
 ViewsRouter.post("/reg/form", response_class=HTMLResponse)(result_page)
