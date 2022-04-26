@@ -4,13 +4,21 @@
 @Author: binkuolo
 @Des: views home
 """
-from fastapi import Request, Form
+from fastapi import Request, Form, Cookie
 from models.base import User
+from typing import Optional
 
 
-async def home(request: Request):
+async def home(request: Request, session_id: Optional[str] = Cookie(None)):
     # return templates.get_template("index.html").render({"request": request, "id": id})
-    return request.app.state.views.TemplateResponse("index.html", {"request": request, "id": id})
+    cookie = session_id
+    session = request.session.get("session")
+    page_data = {
+        "cookie": cookie,
+        "session": session
+    }
+    # request.session.setdefault("55555", "hdaldais")
+    return request.app.state.views.TemplateResponse("index.html", {"request": request, **page_data})
 
 
 async def reg_page(req: Request):

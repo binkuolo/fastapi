@@ -5,4 +5,4 @@
 
 > 微信交流群
 
-<img src="IMG_0089.JPG" alt="微信群定期更新" width="200" height="230" align="bottom" />
+<img src="IMG_0089.JPG" alt="微信群定期更新" width="200" height="260" align="bottom" />
