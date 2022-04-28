@@ -9,7 +9,7 @@ import time
 from starlette.datastructures import MutableHeaders
 from starlette.types import ASGIApp, Receive, Scope, Send, Message
 from fastapi import Request
-from core.Helper import random_str
+from core.Utils import random_str
 
 
 class Middleware:
