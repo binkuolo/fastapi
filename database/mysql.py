@@ -61,5 +61,5 @@ async def register_mysql(app: FastAPI):
         app,
         config=DB_ORM_CONFIG,
         generate_schemas=False,
-        add_exception_handlers=True,
+        add_exception_handlers=False,
     )
