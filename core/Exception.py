@@ -50,6 +50,9 @@ async def http_error_handler(_: Request, exc: HTTPException):
     :param exc:
     :return:
     """
+    if exc.status_code == 401:
+        return JSONResponse({"detail": exc.detail}, status_code=exc.status_code)
+
     return JSONResponse({
         "code": exc.status_code,
         "message": exc.detail,
@@ -96,7 +99,7 @@ async def http422_error_handler(_: Request, exc: Union[RequestValidationError, V
     return JSONResponse(
         {
             "code": status.HTTP_422_UNPROCESSABLE_ENTITY,
-            "message": f"参数校验错误 {exc.errors()}",
+            "message": f"数据校验错误 {exc.errors()}",
             "data": exc.errors(),
         },
         status_code=422,
