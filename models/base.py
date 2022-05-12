@@ -14,7 +14,7 @@ class TimestampMixin(Model):
     update_time = fields.DatetimeField(auto_now=True, description="更新时间")
 
     class Meta:
-        table = None
+        abstract = True
 
 
 class Role(TimestampMixin):
