@@ -5,18 +5,21 @@
 @Des: schemas模型
 """
 from pydantic import Field, BaseModel
-from typing import Optional
+from typing import Optional, List
 from schemas.base import BaseResp
 
 
 class CreateUser(BaseModel):
     username: str = Field(min_length=3, max_length=10)
-    password: str = Field(min_length=8, max_length=12)
+    password: str = Field(min_length=6, max_length=12)
+    user_phone: Optional[str] = Field(regex="^1[34567890]\\d{9}$")
+    user_status: Optional[bool]
+    remarks: Optional[str]
 
 
 class AccountLogin(BaseModel):
-    account: str = Field(min_length=3, max_length=10)
-    password: str = Field(min_length=8, max_length=12)
+    username: str = Field(min_length=3, max_length=10)
+    password: str = Field(min_length=6, max_length=12)
 
 
 class UserInfo(BaseModel):
@@ -32,6 +35,21 @@ class UserInfo(BaseModel):
     sex: int
 
 
+class UserListItem(BaseModel):
+    key: int
+    username: str
+    age: Optional[int]
+    user_type: bool
+    nickname: Optional[str]
+    user_phone: Optional[str]
+    user_email: Optional[str]
+    full_name: Optional[str]
+    user_status: bool
+    header_img: Optional[str]
+    sex: int
+    remarks: Optional[str]
+
+
 class CurrentUser(BaseResp):
     data: UserInfo
 
@@ -43,3 +61,13 @@ class AccessToken(BaseModel):
 
 class UserLogin(BaseResp):
     data: AccessToken
+
+
+class ResAntTable(BaseModel):
+    success: bool
+    data: List
+    total: int
+
+
+class UserListData(ResAntTable):
+    data: List[UserListItem]
