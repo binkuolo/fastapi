@@ -4,7 +4,7 @@
 @Author: binkuolo
 @Des: 用户管理
 """
-from core.Response import success, fail
+from core.Response import success, fail, res_antd
 from schemas.user import CreateUser, AccountLogin, UserInfo
 from core.Utils import en_password, check_password
 from core.Auth import create_access_token
@@ -13,13 +13,18 @@ from curd.user import get_one_user, add_user, get_user_for_username, delete_user
 from config import settings
 
 
-async def user_list():
+async def user_list(
+        size: int = 10,
+        current: int = 1,
+        username: str = None
+):
     """
     获取所有管理员
     :return:
     """
-    user_list_data = await get_all_user()
-    return success(msg="管理员列表", data=user_list_data)
+    data, total = await get_all_user(size, current)
+    return res_antd(code=True, data=data, total=total)
+    # return success(msg="管理员列表", data=user_list_data)
 
 
 async def user_info(req: Request):
@@ -67,13 +72,13 @@ async def account_login(post: AccountLogin):
     :param post:
     :return: jwt token
     """
-    get_user = await get_user_for_username(username=post.account)
+    get_user = await get_user_for_username(username=post.username)
     if not get_user:
-        return fail(msg=f"用户{post.account}密码验证失败!")
+        return fail(msg=f"用户{post.username}密码验证失败!")
     if not check_password(post.password, get_user.password):
-        return fail(msg=f"用户{post.account}密码验证失败!")
+        return fail(msg=f"用户{post.username}密码验证失败!")
     if not get_user.user_status:
-        return fail(msg=f"用户{post.account}已被管理员禁用!")
+        return fail(msg=f"用户{post.username}已被管理员禁用!")
     jwt_data = {
         "user_id": get_user.pk,
         "user_type": get_user.user_type

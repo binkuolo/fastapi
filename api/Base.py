@@ -7,7 +7,7 @@
 from fastapi import APIRouter, Security
 from core.Auth import check_permissions
 from api.user import user_info, user_add, user_del, account_login, user_list
-from schemas.user import CurrentUser, UserLogin
+from schemas.user import CurrentUser, UserLogin, UserListData
 from api.test import test_oath2
 
 ApiRouter = APIRouter(prefix="/api/v1")
@@ -27,21 +27,21 @@ AdminRouter.get("/user/info",
 AdminRouter.get("/user/list",
                 tags=["用户管理"],
                 summary="获取管理员列表",
-                dependencies=[Security(check_permissions, scopes=["user_list"])],
-                # response_model=CurrentUser
+                dependencies=[Security(check_permissions)],
+                response_model=UserListData
                 )(user_list)
 
 
 AdminRouter.delete("/user/del",
                    tags=["用户管理"],
                    summary="管理员删除",
-                   dependencies=[Security(check_permissions, scopes=["user_delete"])]
+                   dependencies=[Security(check_permissions)]
                    )(user_del)
 
 AdminRouter.post("/user/add",
                  tags=["用户管理"],
                  summary="管理员添加",
-                 dependencies=[Security(check_permissions, scopes=["user_add"])]
+                 dependencies=[Security(check_permissions)]
                  )(user_add)
 
 ApiRouter.include_router(AdminRouter)

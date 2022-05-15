@@ -24,10 +24,10 @@ class Config(BaseSettings):
     STATIC_DIR: str = os.path.join(os.getcwd(), "static")
     TEMPLATE_DIR: str = os.path.join(STATIC_DIR, "templates")
     # 跨域请求
-    CORS_ORIGINS = ["http://localhost:5000"]
+    CORS_ORIGINS: List = ["*"]
     CORS_ALLOW_CREDENTIALS: bool = True
-    CORS_ALLOW_METHODS = ["*"]
-    CORS_ALLOW_HEADERS = ["*"]
+    CORS_ALLOW_METHODS: List = ["*"]
+    CORS_ALLOW_HEADERS: List = ["*"]
     # Session
     SECRET_KEY = "session"
     SESSION_COOKIE = "session_id"
