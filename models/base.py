@@ -17,22 +17,9 @@ class TimestampMixin(Model):
         abstract = True
 
 
-class Role(TimestampMixin):
-    role_name = fields.CharField(max_length=15, description="角色名称")
-    user: fields.ManyToManyRelation["User"] = \
-        fields.ManyToManyField("base.User", related_name="role", on_delete=fields.CASCADE)
-    access: fields.ManyToManyRelation["Access"] = \
-        fields.ManyToManyField("base.Access", related_name="role", on_delete=fields.CASCADE)
-    role_status = fields.BooleanField(default=False, description="True:启用 False:禁用")
-    role_desc = fields.CharField(null=True, max_length=255, description='角色描述')
-
-    class Meta:
-        table_description = "角色表"
-        table = "role"
-
-
 class User(TimestampMixin):
-    role: fields.ManyToManyRelation[Role]
+    role: fields.ManyToManyRelation["Role"] = \
+        fields.ManyToManyField("base.Role", related_name="user", on_delete=fields.CASCADE)
     username = fields.CharField(null=True, max_length=20, description="用户名")
     user_type = fields.BooleanField(default=False, description="用户类型 True:超级管理员 False:普通管理员")
     password = fields.CharField(null=True, max_length=255)
@@ -49,6 +36,19 @@ class User(TimestampMixin):
     class Meta:
         table_description = "用户表"
         table = "user"
+
+
+class Role(TimestampMixin):
+    user: fields.ManyToManyRelation[User]
+    role_name = fields.CharField(max_length=15, description="角色名称")
+    access: fields.ManyToManyRelation["Access"] = \
+        fields.ManyToManyField("base.Access", related_name="role", on_delete=fields.CASCADE)
+    role_status = fields.BooleanField(default=False, description="True:启用 False:禁用")
+    role_desc = fields.CharField(null=True, max_length=255, description='角色描述')
+
+    class Meta:
+        table_description = "角色表"
+        table = "role"
 
 
 class Access(TimestampMixin):

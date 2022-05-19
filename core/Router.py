@@ -4,14 +4,14 @@
 @Author: binkuolo
 @Des: 路由聚合
 """
-from api.Base import ApiRouter
-from views.Base import ViewsRouter
+from api.api import api_router
+from views.views import views_router
 from fastapi import APIRouter
 
 
-AllRouter = APIRouter()
+router = APIRouter()
 # 视图路由
-AllRouter.include_router(ViewsRouter)
+router.include_router(views_router)
 # API路由
-AllRouter.include_router(ApiRouter)
+router.include_router(api_router)
 
