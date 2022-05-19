@@ -4,9 +4,13 @@
 @Author: binkuolo
 @Des: views home
 """
-from fastapi import Request
+from fastapi import Request, APIRouter
+from fastapi.responses import HTMLResponse
+
+router = APIRouter()
 
 
+@router.get("/", tags=["门户首页"], response_class=HTMLResponse)
 async def home(request: Request):
     """
     门户首页
