@@ -12,7 +12,7 @@ from fastapi import Request
 from core.Utils import random_str
 
 
-class Middleware:
+class BaseMiddleware:
     """
     Middleware
     """
