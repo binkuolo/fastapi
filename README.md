@@ -3,6 +3,8 @@
 
 > [笔记](https://wiki.binkuolo.com)
 
+> [演示站点](http://fastapi.binkuolo.com)
+
 > 微信交流群
 
 <img src="IMG_0089.JPG" alt="微信群定期更新" width="200" height="260" align="bottom" />
