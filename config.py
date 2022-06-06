@@ -39,5 +39,8 @@ class Config(BaseSettings):
 
     SWAGGER_UI_OAUTH2_REDIRECT_URL = "/api/v1/test/oath2"
 
+    # 二维码过期时间
+    QRCODE_EXPIRE = 60 * 1
+
 
 settings = Config()

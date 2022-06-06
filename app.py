@@ -107,7 +107,7 @@ application.add_middleware(
 application.include_router(Router.router)
 
 # 静态资源目录
-application.mount('/static', StaticFiles(directory=settings.STATIC_DIR), name="static")
+application.mount('/', StaticFiles(directory=settings.STATIC_DIR), name="static")
 application.state.views = Jinja2Templates(directory=settings.TEMPLATE_DIR)
 
 app = application

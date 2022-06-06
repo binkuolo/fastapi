@@ -17,6 +17,23 @@ class TimestampMixin(Model):
         abstract = True
 
 
+class UserWechat(TimestampMixin):
+    city = fields.CharField(null=True, max_length=255, description='城市')
+    country = fields.CharField(null=True, max_length=255, description='国家')
+    headimgurl = fields.CharField(null=True, max_length=255, description='微信头像')
+    nickname = fields.CharField(null=True, max_length=255, description='微信昵称')
+    openid = fields.CharField(unique=True, max_length=255, description='openid')
+    unionid = fields.CharField(unique=True, null=True, max_length=255, description='unionid')
+    province = fields.CharField(null=True, max_length=255, description='省份')
+    sex = fields.IntField(null=True, description='性别')
+    user: fields.ForeignKeyRelation["UserWechat"] = \
+        fields.ForeignKeyField("base.User", related_name="wechat", on_delete=fields.CASCADE)
+
+    class Meta:
+        table_description = "用户微信"
+        table = "user_wechat"
+
+
 class User(TimestampMixin):
     role: fields.ManyToManyRelation["Role"] = \
         fields.ManyToManyField("base.Role", related_name="user", on_delete=fields.CASCADE)
@@ -32,6 +49,7 @@ class User(TimestampMixin):
     sex = fields.IntField(default=0, null=True, description='0未知 1男 2女')
     remarks = fields.CharField(null=True, max_length=30, description="备注")
     client_host = fields.CharField(null=True, max_length=19, description="访问IP")
+    wechat: fields.ForeignKeyRelation[UserWechat]
 
     class Meta:
         table_description = "用户表"
@@ -77,3 +95,12 @@ class AccessLog(TimestampMixin):
     class Meta:
         table_description = "用户操作记录表"
         table = "access_log"
+
+
+class SystemParams(TimestampMixin):
+    params_name = fields.CharField(unique=True, max_length=255, description="参数名")
+    params = fields.JSONField(description="参数")
+
+    class Meta:
+        table_description = "系统参数表"
+        table = "system_params"

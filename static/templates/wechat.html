@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>微信授权</title>
+</head>
+<body>
+{% if not errmsg %}
+<div style="text-align: center; padding-top: 30%">
+    <img src={{headimgurl}} width="400" height="400" style="border-radius: 500px">
+    <h1>{{nickname}}</h1>
+    <h1>{{client_ip}}</h1>
+    <button style="color: #19a974; font-size: 50px">授权成功</button>
+</div>
+{% else %}
+<h1>{{errmsg}}</h1>
+{% endif %}
+</body>
+<script>
+    setTimeout(() => {
+        document.addEventListener("WeixinJSBridgeReady", () => {
+            WeixinJSBridge.call("closeWindow");
+        }, false);
+        // ios手机
+        WeixinJSBridge.call("closeWindow");
+    }, 3000);
+</script>
+</html>

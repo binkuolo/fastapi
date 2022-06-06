@@ -11,7 +11,7 @@
  Target Server Version : 100237
  File Encoding         : 65001
 
- Date: 20/05/2022 02:57:26
+ Date: 07/06/2022 00:48:15
 */
 
 SET NAMES utf8mb4;
@@ -118,6 +118,27 @@ BEGIN;
 COMMIT;
 
 -- ----------------------------
+-- Table structure for system_params
+-- ----------------------------
+DROP TABLE IF EXISTS `system_params`;
+CREATE TABLE `system_params` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `create_time` datetime(6) NOT NULL DEFAULT current_timestamp(6) COMMENT '创建时间',
+  `update_time` datetime(6) NOT NULL DEFAULT current_timestamp(6) ON UPDATE current_timestamp(6) COMMENT '更新时间',
+  `params_name` varchar(255) NOT NULL COMMENT '参数名',
+  `params` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '参数',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `params_name` (`params_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='系统参数表';
+
+-- ----------------------------
+-- Records of system_params
+-- ----------------------------
+BEGIN;
+INSERT INTO `system_params` VALUES (3, '2022-06-04 18:03:00.648479', '2022-06-06 16:46:40.819864', 'wechat_auth', '{\"appid\":\"wx42649ae9ca1a9810\",\"secret\":\"007c4c3841f5cabf85d20e60140a85cd\",\"redirect_uri\":\"http://auth.binkuolo.com/api/v1/wechat/auth/call\"}');
+COMMIT;
+
+-- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
@@ -164,6 +185,37 @@ CREATE TABLE `user_role` (
 -- Records of user_role
 -- ----------------------------
 BEGIN;
+COMMIT;
+
+-- ----------------------------
+-- Table structure for user_wechat
+-- ----------------------------
+DROP TABLE IF EXISTS `user_wechat`;
+CREATE TABLE `user_wechat` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `create_time` datetime(6) NOT NULL DEFAULT current_timestamp(6) COMMENT '创建时间',
+  `update_time` datetime(6) NOT NULL DEFAULT current_timestamp(6) ON UPDATE current_timestamp(6) COMMENT '更新时间',
+  `city` varchar(255) DEFAULT NULL COMMENT '城市',
+  `country` varchar(255) DEFAULT NULL COMMENT '国家',
+  `headimgurl` varchar(255) DEFAULT NULL COMMENT '微信头像',
+  `nickname` varchar(255) DEFAULT NULL COMMENT '微信昵称',
+  `openid` varchar(255) NOT NULL COMMENT 'openid',
+  `unionid` varchar(255) DEFAULT NULL COMMENT 'unionid',
+  `province` varchar(255) DEFAULT NULL COMMENT '省份',
+  `sex` int(11) DEFAULT NULL COMMENT '性别',
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `openid` (`openid`),
+  UNIQUE KEY `unionid` (`unionid`),
+  KEY `fk_user_wec_user_a1775abb` (`user_id`),
+  CONSTRAINT `fk_user_wec_user_a1775abb` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='用户微信';
+
+-- ----------------------------
+-- Records of user_wechat
+-- ----------------------------
+BEGIN;
+INSERT INTO `user_wechat` VALUES (1, '2022-06-06 13:58:44.764153', '2022-06-06 16:46:00.187631', NULL, NULL, NULL, NULL, 'openid', NULL, NULL, NULL, 1);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
