@@ -96,6 +96,7 @@ async def http422_error_handler(_: Request, exc: Union[RequestValidationError, V
     :param exc:
     :return:
     """
+    print("[422]", exc.errors())
     return JSONResponse(
         {
             "code": status.HTTP_422_UNPROCESSABLE_ENTITY,
