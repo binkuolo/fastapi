@@ -4,6 +4,7 @@
 @Author: binkuolo
 @Des: 用户管理
 """
+from api.extends.sms import check_code
 from core.Response import success, fail, res_antd
 from models.base import User, Role, Access
 from schemas import user
@@ -180,25 +181,44 @@ async def user_info(req: Request):
 
 
 @router.post("/account/login", response_model=user.UserLogin, summary="用户登陆")
-async def account_login(post: user.AccountLogin):
+async def account_login(req: Request, post: user.AccountLogin):
     """
     用户登陆
+    :param req:
     :param post:
     :return: jwt token
     """
-    get_user = await User.get_or_none(username=post.username)
-    if not get_user:
-        return fail(msg=f"用户{post.username}密码验证失败!")
-    if not get_user.password:
-        return fail(msg=f"用户{post.username}密码验证失败!")
-    if not check_password(post.password, get_user.password):
-        return fail(msg=f"用户{post.username}密码验证失败!")
-    if not get_user.user_status:
-        return fail(msg=f"用户{post.username}已被管理员禁用!")
-    jwt_data = {
-        "user_id": get_user.pk,
-        "user_type": get_user.user_type
-    }
-    jwt_token = create_access_token(data=jwt_data)
-    data = {"token": jwt_token, "expires_in": settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES * 60}
-    return success(msg="登陆成功😄", data=data)
+    if post.mobile and post.captcha:
+        # 手机号登陆
+        is_check = await check_code(req, post.captcha, post.mobile)
+        if not is_check:
+            return fail(msg="验证码无效, 登陆失败, 请重新登陆!")
+        mobile_user = await User.get_or_none(user_phone=post.mobile)
+        jwt_data = {
+            "user_id": mobile_user.pk,
+            "user_type": mobile_user.user_type
+        }
+        jwt_token = create_access_token(data=jwt_data)
+        data = {"token": jwt_token, "expires_in": settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES * 60}
+        return success(msg="登陆成功😄", data=data)
+
+    if post.username and post.password:
+        # 账号密码登陆
+        get_user = await User.get_or_none(username=post.username)
+        if not get_user:
+            return fail(msg=f"用户{post.username}密码验证失败!")
+        if not get_user.password:
+            return fail(msg=f"用户{post.username}密码验证失败!")
+        if not check_password(post.password, get_user.password):
+            return fail(msg=f"用户{post.username}密码验证失败!")
+        if not get_user.user_status:
+            return fail(msg=f"用户{post.username}已被管理员禁用!")
+        jwt_data = {
+            "user_id": get_user.pk,
+            "user_type": get_user.user_type
+        }
+        jwt_token = create_access_token(data=jwt_data)
+        data = {"token": jwt_token, "expires_in": settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES * 60}
+        return success(msg="登陆成功😄", data=data)
+
+    return fail(msg="至少选择一种登陆方式!")
