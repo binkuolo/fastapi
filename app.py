@@ -36,7 +36,7 @@ def custom_openapi():
         routes=app.routes,
     )
     openapi_schema["info"]["x-logo"] = {
-        "url": "/static/logo-teal.png"
+        "url": "/logo-teal.png"
     }
     application.openapi_schema = openapi_schema
     return application.openapi_schema
@@ -52,8 +52,8 @@ async def custom_swagger_ui_html():
         openapi_url=application.openapi_url,
         title=application.title + " - Swagger UI",
         oauth2_redirect_url=application.swagger_ui_oauth2_redirect_url,
-        swagger_js_url="/static/swagger-ui-bundle.js",
-        swagger_css_url="/static/swagger-ui.css",
+        swagger_js_url="/swagger-ui-bundle.js",
+        swagger_css_url="/swagger-ui.css",
     )
 
 
@@ -69,7 +69,7 @@ async def redoc_html():
     return get_redoc_html(
         openapi_url=application.openapi_url,
         title=application.title + " - ReDoc",
-        redoc_js_url="/static/redoc.standalone.js",
+        redoc_js_url="/redoc.standalone.js",
     )
 
 
