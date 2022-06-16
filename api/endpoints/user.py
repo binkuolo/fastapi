@@ -173,7 +173,9 @@ async def user_info(req: Request):
 
         query_access = await Access.filter(id__in=list(set(one_level_access + two_level_access))).values_list("scopes")
         access = [i[0] for i in query_access]
-
+    # 处理手机号 ****
+    if user_data.user_phone:
+        user_data.user_phone = user_data.user_phone.replace(user_data.user_phone[3:7], "****")
     # 将作用域加入到用户信息中
     user_data.__setattr__("scopes", access)
 
