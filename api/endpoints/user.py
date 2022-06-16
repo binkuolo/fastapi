@@ -4,6 +4,7 @@
 @Author: binkuolo
 @Des: 用户管理
 """
+from api.endpoints.common import write_access_log
 from api.extends.sms import check_code
 from core.Response import success, fail, res_antd
 from models.base import User, Role, Access
@@ -202,6 +203,7 @@ async def account_login(req: Request, post: user.AccountLogin):
         }
         jwt_token = create_access_token(data=jwt_data)
         data = {"token": jwt_token, "expires_in": settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES * 60}
+        await write_access_log(req, mobile_user.pk, "通过手机号登陆了系统!")
         return success(msg="登陆成功😄", data=data)
 
     if post.username and post.password:
@@ -221,6 +223,7 @@ async def account_login(req: Request, post: user.AccountLogin):
         }
         jwt_token = create_access_token(data=jwt_data)
         data = {"token": jwt_token, "expires_in": settings.JWT_ACCESS_TOKEN_EXPIRE_MINUTES * 60}
+        await write_access_log(req, get_user.pk, "通过用户名登陆了系统!")
         return success(msg="登陆成功😄", data=data)
 
     return fail(msg="至少选择一种登陆方式!")
