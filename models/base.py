@@ -26,8 +26,8 @@ class UserWechat(TimestampMixin):
     unionid = fields.CharField(unique=True, null=True, max_length=255, description='unionid')
     province = fields.CharField(null=True, max_length=255, description='省份')
     sex = fields.IntField(null=True, description='性别')
-    user: fields.ForeignKeyRelation["UserWechat"] = \
-        fields.ForeignKeyField("base.User", related_name="wechat", on_delete=fields.CASCADE)
+    user: fields.OneToOneRelation["UserWechat"] = \
+        fields.OneToOneField("base.User", related_name="wechat", on_delete=fields.CASCADE)
 
     class Meta:
         table_description = "用户微信"
