@@ -49,7 +49,7 @@ class User(TimestampMixin):
     sex = fields.IntField(default=0, null=True, description='0未知 1男 2女')
     remarks = fields.CharField(null=True, max_length=30, description="备注")
     client_host = fields.CharField(null=True, max_length=19, description="访问IP")
-    wechat: fields.ForeignKeyRelation[UserWechat]
+    wechat: fields.OneToOneRelation[UserWechat]
 
     class Meta:
         table_description = "用户表"
