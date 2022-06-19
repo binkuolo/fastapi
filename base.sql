@@ -11,7 +11,7 @@
  Target Server Version : 100237
  File Encoding         : 65001
 
- Date: 07/06/2022 00:48:15
+ Date: 19/06/2022 17:21:06
 */
 
 SET NAMES utf8mb4;
@@ -129,13 +129,14 @@ CREATE TABLE `system_params` (
   `params` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '参数',
   PRIMARY KEY (`id`),
   UNIQUE KEY `params_name` (`params_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='系统参数表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='系统参数表';
 
 -- ----------------------------
 -- Records of system_params
 -- ----------------------------
 BEGIN;
-INSERT INTO `system_params` VALUES (3, '2022-06-04 18:03:00.648479', '2022-06-06 16:46:40.819864', 'wechat_auth', '{\"appid\":\"wx42649ae9ca1a9810\",\"secret\":\"007c4c3841f5cabf85d20e60140a85cd\",\"redirect_uri\":\"http://auth.binkuolo.com/api/v1/wechat/auth/call\"}');
+INSERT INTO `system_params` VALUES (1, '2022-06-04 18:03:00.648479', '2022-06-19 09:18:35.423468', 'wechat_auth', '{\"appid\":\"1111\",\"secret\":\"cabf85d20e60140a85cd\",\"redirect_uri\":\"http://auth.binkuolo.com/api/v1/wechat\",\"expire\":1}');
+INSERT INTO `system_params` VALUES (2, '2022-06-07 21:42:48.946171', '2022-06-19 09:19:24.337017', 'tencent_sms', '{\"secret_id\":\"xV4\",\"secret_key\":\"J3XHm46sOdcKejaBX7\",\"region\":\"ap-guangzhou\",\"app_id\":\"140042\",\"sign\":\"签名\",\"template_id\":\"7896\",\"expire\":10}');
 COMMIT;
 
 -- ----------------------------
@@ -165,7 +166,7 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1, '2022-05-18 18:25:56.776176', '2022-05-19 09:51:02.845342', 'admin', 1, '$pbkdf2-sha256$29000$TYnxfk.pNYZwLgXA2DsHgA$8x2oHJzqMjATdVnHIO86DsU3xhQ7IzvIB.1H8tDyHpQ', 'binkuolo', '13345678120', NULL, NULL, 1, NULL, 0, 'string', NULL);
+INSERT INTO `user` VALUES (1, '2022-05-18 18:25:56.776176', '2022-06-19 09:04:35.791494', 'admin', 1, '$pbkdf2-sha256$29000$TYnxfk.pNYZwLgXA2DsHgA$8x2oHJzqMjATdVnHIO86DsU3xhQ7IzvIB.1H8tDyHpQ', '冰阔落', '19391008993', 'binkuolo@163.com', NULL, 1, 'https://thirdwx.qlogo.cn/mmopen/vi_32/gTJ63Ml8FDvibSWh4qibP64T9t6aHCA5eUUB9EFjBKIAzFHG2q8K8fWbRWrAOWvGZFZraSB7Hx278POsD5YSPduw/132', 0, 'string', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -206,16 +207,15 @@ CREATE TABLE `user_wechat` (
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `openid` (`openid`),
+  UNIQUE KEY `user_id` (`user_id`),
   UNIQUE KEY `unionid` (`unionid`),
-  KEY `fk_user_wec_user_a1775abb` (`user_id`),
   CONSTRAINT `fk_user_wec_user_a1775abb` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='用户微信';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户微信';
 
 -- ----------------------------
 -- Records of user_wechat
 -- ----------------------------
 BEGIN;
-INSERT INTO `user_wechat` VALUES (1, '2022-06-06 13:58:44.764153', '2022-06-06 16:46:00.187631', NULL, NULL, NULL, NULL, 'openid', NULL, NULL, NULL, 1);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
