@@ -7,7 +7,7 @@
 from api.endpoints.common import write_access_log
 from api.extends.sms import check_code
 from core.Response import success, fail, res_antd
-from models.base import User, Role, Access
+from models.base import User, Role, Access, AccessLog
 from schemas import user
 from core.Utils import en_password, check_password
 from core.Auth import create_access_token, check_permissions
@@ -15,6 +15,8 @@ from fastapi import Request, Query, APIRouter, Security
 from config import settings
 from typing import List
 from tortoise.queryset import F
+
+from schemas.user import UpdateUserInfo, ModifyMobile
 
 router = APIRouter(prefix='/user')
 
@@ -227,3 +229,43 @@ async def account_login(req: Request, post: user.AccountLogin):
         return success(msg="登陆成功😄", data=data)
 
     return fail(msg="至少选择一种登陆方式!")
+
+
+@router.get("/access/log", dependencies=[Security(check_permissions)], summary="用户访问记录")
+async def get_access_log(req: Request):
+    """
+    查询当前用户访问记录
+    :param req:
+    :return:
+    """
+    log = await AccessLog().filter(user_id=req.state.user_id).limit(10).order_by("-create_time")\
+        .values("create_time", "ip", "note", "id")
+
+    return success(msg="access log", data=log)
+
+
+@router.put("/info", dependencies=[Security(check_permissions)], summary="用户基本信息修改")
+async def update_user_info(req: Request, post: UpdateUserInfo):
+    """
+    修改个人信息
+    :param req:
+    :param post:
+    :return:
+    """
+    await User.filter(id=req.state.user_id).update(**post.dict(exclude_none=True))
+    return success(msg="基本信息更新成功!")
+
+
+@router.put("/modify/mobile", dependencies=[Security(check_permissions)], summary="用户手机号修改")
+async def update_user_info(req: Request, post: ModifyMobile):
+    """
+    修改绑定手机号
+    :param req:
+    :param post:
+    :return:
+    """
+    is_check = await check_code(req, post.captcha, post.mobile)
+    if not is_check:
+        return fail(msg="无效验证码或验证已过期!")
+    await User.filter(id=req.state.user_id).update(user_phone=post.mobile)
+    return success(msg="手机号修改成功,登陆请用新绑定的手机号码!")

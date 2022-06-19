@@ -5,7 +5,7 @@
 @Des: schemas模型
 """
 from datetime import datetime
-from pydantic import Field, BaseModel
+from pydantic import Field, BaseModel, validator
 from typing import Optional, List
 from schemas.base import BaseResp, ResAntTable
 
@@ -34,8 +34,15 @@ class SetRole(BaseModel):
 
 
 class AccountLogin(BaseModel):
-    username: str = Field(min_length=3, max_length=10)
-    password: str = Field(min_length=6, max_length=12)
+    username: Optional[str] = Field(min_length=3, max_length=10, description="用户名")
+    password: Optional[str] = Field(min_length=6, max_length=12, description="密码")
+    mobile: Optional[str] = Field(regex="^1[34567890]\\d{9}$", description="手机号")
+    captcha: Optional[str] = Field(min_length=6, max_length=6, description="6位验证码")
+
+
+class ModifyMobile(BaseModel):
+    mobile: str = Field(regex="^1[34567890]\\d{9}$", description="手机号")
+    captcha: str = Field(min_length=6, max_length=6, description="6位验证码")
 
 
 class UserInfo(BaseModel):
@@ -85,3 +92,17 @@ class UserLogin(BaseResp):
 
 class UserListData(ResAntTable):
     data: List[UserListItem]
+
+
+class UpdateUserInfo(BaseModel):
+    nickname: Optional[str]
+    user_email: Optional[str]
+    header_img: Optional[str]
+    user_phone: Optional[str] = Field(regex="^1[34567890]\\d{9}$", description="手机号")
+    password: Optional[str] = Field(min_length=6, max_length=12, description="密码")
+
+    @validator('*')
+    def blank_strings(cls, v):
+        if v == "":
+            return None
+        return v
