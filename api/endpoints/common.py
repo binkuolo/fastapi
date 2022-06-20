@@ -25,7 +25,7 @@ async def write_access_log(req: Request, user_id: int,  note: str = None):
             "params": dict(req.query_params),
             "body": bytes(await req.body()).decode()
         },
-        "ip": req.client.host,
+        "ip": req.headers.get('x-forwarded-for'),
         "note": note
     }
     await AccessLog.create(**data)

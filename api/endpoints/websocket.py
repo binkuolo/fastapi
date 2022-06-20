@@ -54,7 +54,7 @@ class Echo(WebSocketEndpoint):
     async def on_connect(self, web_socket: WebSocket):
         u_type = web_socket.query_params.get("u_type")
         token = web_socket.headers.get("sec-websocket-protocol")
-        real_ip = web_socket.headers.get("origin")
+        real_ip = web_socket.headers.get('x-forwarded-for')
         real_host = web_socket.headers.get("host")
 
         try:
