@@ -7,4 +7,4 @@
 
 > 微信交流群
 
-<img src="IMG_0801.JPG" alt="微信群定期更新" width="200" height="260" align="bottom" />
+<img src="IMG_0878.JPG" alt="微信群定期更新" width="200" height="260" align="bottom" />
