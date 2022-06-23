@@ -3,7 +3,7 @@
 
 > [笔记](https://wiki.binkuolo.com)
 
-> [演示站点](http://fastapi.binkuolo.com)
+> [演示站点admin密码123456](http://fastapi.binkuolo.com)
 
 > 微信交流群
 
