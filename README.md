@@ -5,7 +5,7 @@
 <a href="https://github.com/binkuolo/fastapi">
     <img src="https://badgen.net/badge/Github/fastapi/21D789?icon=github">
 </a>
-<a href="https://github.com/binkuolo/fastapi/main/LICENSE">
+<a href="https://github.com/binkuolo/fastapi/blob/main/LICENSE">
     <img alt="GitHub" src="https://img.shields.io/github/license/binkuolo/fastapi?style=flat-square">
 </a>
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/binkuolo/fastapi?style=flat-square">
