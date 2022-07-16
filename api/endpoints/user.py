@@ -4,14 +4,17 @@
 @Author: binkuolo
 @Des: 用户管理
 """
+import os
+import time
+
 from api.endpoints.common import write_access_log
 from api.extends.sms import check_code
 from core.Response import success, fail, res_antd
 from models.base import User, Role, Access, AccessLog
 from schemas import user
-from core.Utils import en_password, check_password
+from core.Utils import en_password, check_password, random_str
 from core.Auth import create_access_token, check_permissions
-from fastapi import Request, Query, APIRouter, Security
+from fastapi import Request, Query, APIRouter, Security, File, UploadFile
 from config import settings
 from typing import List
 from tortoise.queryset import F
@@ -238,7 +241,7 @@ async def get_access_log(req: Request):
     :param req:
     :return:
     """
-    log = await AccessLog().filter(user_id=req.state.user_id).limit(10).order_by("-create_time")\
+    log = await AccessLog().filter(user_id=req.state.user_id).limit(10).order_by("-create_time") \
         .values("create_time", "ip", "note", "id")
 
     return success(msg="access log", data=log)
@@ -253,7 +256,7 @@ async def update_user_info(req: Request, post: UpdateUserInfo):
     :return:
     """
     await User.filter(id=req.state.user_id).update(**post.dict(exclude_none=True))
-    return success(msg="基本信息更新成功!")
+    return success(msg="更新成功!")
 
 
 @router.put("/modify/mobile", dependencies=[Security(check_permissions)], summary="用户手机号修改")
@@ -269,3 +272,31 @@ async def update_user_info(req: Request, post: ModifyMobile):
         return fail(msg="无效验证码或验证已过期!")
     await User.filter(id=req.state.user_id).update(user_phone=post.mobile)
     return success(msg="手机号修改成功,登陆请用新绑定的手机号码!")
+
+
+@router.put("/avatar/upload", dependencies=[Security(check_permissions)], summary="头像修改")
+async def avatar_upload(req: Request, avatar: UploadFile = File(...)):
+    """
+    头像上传
+    :param req:
+    :param avatar:
+    :return:
+    """
+    # 文件存储路径
+    path = f"{settings.STATIC_DIR}/upload/avatar"
+    start = time.time()
+    filename = random_str() + '.' + avatar.filename.split(".")[1]
+    try:
+        if not os.path.isdir(path):
+            os.makedirs(path, 0o777)
+        res = await avatar.read()
+        with open(f"{path}/{filename}", "wb") as f:
+            f.write(res)
+        await User.filter(id=req.state.user_id).update(header_img=f"/upload/avatar/{filename}")
+        data = {
+            'time': time.time() - start,
+            'url': f"/upload/avatar/{filename}"}
+        return success(msg="更新头像成功", data=data)
+    except Exception as e:
+        print("头像上传失败:", e)
+        return fail(msg=f"{avatar.filename}上传失败!")
