@@ -11,7 +11,7 @@
  Target Server Version : 100237
  File Encoding         : 65001
 
- Date: 19/06/2022 17:21:06
+ Date: 16/07/2022 22:08:57
 */
 
 SET NAMES utf8mb4;
@@ -34,7 +34,7 @@ CREATE TABLE `access` (
   `is_menu` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否为菜单 True菜单 False不是菜单',
   PRIMARY KEY (`id`),
   UNIQUE KEY `scopes` (`scopes`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COMMENT='权限表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COMMENT='权限表';
 
 -- ----------------------------
 -- Records of access
@@ -129,14 +129,15 @@ CREATE TABLE `system_params` (
   `params` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '参数',
   PRIMARY KEY (`id`),
   UNIQUE KEY `params_name` (`params_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='系统参数表';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='系统参数表';
 
 -- ----------------------------
 -- Records of system_params
 -- ----------------------------
 BEGIN;
-INSERT INTO `system_params` VALUES (1, '2022-06-04 18:03:00.648479', '2022-06-19 09:18:35.423468', 'wechat_auth', '{\"appid\":\"1111\",\"secret\":\"cabf85d20e60140a85cd\",\"redirect_uri\":\"http://auth.binkuolo.com/api/v1/wechat\",\"expire\":1}');
-INSERT INTO `system_params` VALUES (2, '2022-06-07 21:42:48.946171', '2022-06-19 09:19:24.337017', 'tencent_sms', '{\"secret_id\":\"xV4\",\"secret_key\":\"J3XHm46sOdcKejaBX7\",\"region\":\"ap-guangzhou\",\"app_id\":\"140042\",\"sign\":\"签名\",\"template_id\":\"7896\",\"expire\":10}');
+INSERT INTO `system_params` VALUES (1, '2022-06-04 18:03:00.648479', '2022-07-16 14:07:37.491553', 'wechat_auth', '{\"appid\":\"1\",\"secret\":\"1\",\"redirect_uri\":\"http://fastapi.binkuolo.com/api/v1/wechat/auth/call\",\"expire\":1}');
+INSERT INTO `system_params` VALUES (2, '2022-06-07 21:42:48.946171', '2022-07-16 14:07:45.691333', 'tencent_sms', '{\"secret_id\":\"1\",\"secret_key\":\"1\",\"region\":\"ap-guangzhou\",\"app_id\":\"1400440642\",\"sign\":\"贵州红帽网络\",\"template_id\":\"757896\",\"expire\":10}');
+INSERT INTO `system_params` VALUES (3, '2022-07-08 17:56:05.098642', '2022-07-16 14:07:54.795525', 'tencent_cos', '{\"duration_seconds\":1800,\"secret_id\":\"1\",\"secret_key\":\"1\",\"region\":\"ap-chongqing\"}');
 COMMIT;
 
 -- ----------------------------
@@ -166,7 +167,7 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1, '2022-05-18 18:25:56.776176', '2022-06-19 09:04:35.791494', 'admin', 1, '$pbkdf2-sha256$29000$TYnxfk.pNYZwLgXA2DsHgA$8x2oHJzqMjATdVnHIO86DsU3xhQ7IzvIB.1H8tDyHpQ', '冰阔落', '19391008993', 'binkuolo@163.com', NULL, 1, 'https://thirdwx.qlogo.cn/mmopen/vi_32/gTJ63Ml8FDvibSWh4qibP64T9t6aHCA5eUUB9EFjBKIAzFHG2q8K8fWbRWrAOWvGZFZraSB7Hx278POsD5YSPduw/132', 0, 'string', NULL);
+INSERT INTO `user` VALUES (1, '2022-05-18 18:25:56.776176', '2022-07-16 09:36:46.742337', 'admin', 1, '$pbkdf2-sha256$29000$TYnxfk.pNYZwLgXA2DsHgA$8x2oHJzqMjATdVnHIO86DsU3xhQ7IzvIB.1H8tDyHpQ', '冰阔落', '19391008993', 'binkuolo@163.com', NULL, 1, 'http://fastapi-demo-1302232104.cos.ap-chongqing.myqcloud.com/fastapi/header-image/8c99cf1bd39f8df7b4e114935eaecec7.png', 0, 'string', NULL);
 COMMIT;
 
 -- ----------------------------
