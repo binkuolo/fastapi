@@ -23,7 +23,7 @@ async def mysql_validation_error(_: Request, exc: MysqlValidationError):
     print("ValidationError", exc)
     return JSONResponse({
         "code": -1,
-        "message": exc,
+        "message": exc.__str__(),
         "data": []
     }, status_code=422)
 
@@ -38,7 +38,7 @@ async def mysql_integrity_error(_: Request, exc: IntegrityError):
     print("IntegrityError", exc)
     return JSONResponse({
         "code": -1,
-        "message": exc,
+        "message": exc.__str__(),
         "data": []
     }, status_code=422)
 
