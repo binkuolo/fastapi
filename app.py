@@ -13,7 +13,7 @@ from config import settings
 from fastapi.staticfiles import StaticFiles
 from core import Exception, Events, Router, Middleware
 from fastapi.templating import Jinja2Templates
-from tortoise.exceptions import OperationalError, DoesNotExist
+from tortoise.exceptions import OperationalError, DoesNotExist, IntegrityError, ValidationError
 from fastapi.openapi.docs import (get_redoc_html, get_swagger_ui_html, get_swagger_ui_oauth2_redirect_html)
 from fastapi.openapi.utils import get_openapi
 
@@ -82,6 +82,8 @@ application.add_exception_handler(HTTPException, Exception.http_error_handler)
 application.add_exception_handler(RequestValidationError, Exception.http422_error_handler)
 application.add_exception_handler(Exception.UnicornException, Exception.unicorn_exception_handler)
 application.add_exception_handler(DoesNotExist, Exception.mysql_does_not_exist)
+application.add_exception_handler(IntegrityError, Exception.mysql_integrity_error)
+application.add_exception_handler(ValidationError, Exception.mysql_validation_error)
 application.add_exception_handler(OperationalError, Exception.mysql_operational_error)
 
 

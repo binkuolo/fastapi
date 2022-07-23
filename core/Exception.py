@@ -10,7 +10,37 @@ from fastapi.responses import JSONResponse
 from typing import Union
 from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
-from tortoise.exceptions import OperationalError, DoesNotExist
+from tortoise.exceptions import OperationalError, DoesNotExist, IntegrityError, ValidationError as MysqlValidationError
+
+
+async def mysql_validation_error(_: Request, exc: MysqlValidationError):
+    """
+    数据库字段验证错误
+    :param _:
+    :param exc:
+    :return:
+    """
+    print("ValidationError", exc)
+    return JSONResponse({
+        "code": -1,
+        "message": exc,
+        "data": []
+    }, status_code=422)
+
+
+async def mysql_integrity_error(_: Request, exc: IntegrityError):
+    """
+    完整性错误
+    :param _:
+    :param exc:
+    :return:
+    """
+    print("IntegrityError", exc)
+    return JSONResponse({
+        "code": -1,
+        "message": exc,
+        "data": []
+    }, status_code=422)
 
 
 async def mysql_does_not_exist(_: Request, exc: DoesNotExist):
@@ -38,7 +68,7 @@ async def mysql_operational_error(_: Request, exc: OperationalError):
     print("OperationalError", exc)
     return JSONResponse({
         "code": -1,
-        "message": "服务端错误",
+        "message": "数据操作失败",
         "data": []
     }, status_code=500)
 
