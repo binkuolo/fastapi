@@ -66,10 +66,11 @@ async def set_role_access(post: role.SetAccess):
     """
     # 获取当前角色
     role_data = await Role.get_or_none(id=post.role_id)
-    # 无设置权限时清空权限
+    # 清空权限
+    await role_data.access.clear()
+    # 无设置权限
     if not post.access:
-        await role_data.access.clear()
-        return success(msg="已清空当前角色权限!")
+        return success(msg="已清空当前角色所有权限!")
     # 获取分配的权限集合
     access = await Access.filter(id__in=post.access, is_check=True).all()
     # 添加权限
