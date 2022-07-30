@@ -73,7 +73,7 @@ async def user_update(post: user.UpdateUser):
     """
     user_check = await User.get_or_none(pk=post.id)
     # 超级管理员或不存在的用户
-    if not user or user_check.pk == 1:
+    if not user_check or user_check.pk == 1:
         return fail(msg="用户不存在")
     if user_check.username != post.username:
         check_username = await User.get_or_none(username=post.username)
