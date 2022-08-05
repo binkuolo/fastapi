@@ -25,7 +25,4 @@
 
 > 感谢大家的一键三连和赞助支持! (若二维码过期请通过各种渠道通知我)
 
-<img src="IMG_1441.JPG" title="微信交流群" alt="微信群定期更新" width="200" height="260" />
-<img src="IMG_1356.JPG" alt="为了方便大家的赞助支持" title="为了方便大家的赞助支持" width="200" height="260" />
-
-打赏备注(FastApi项目赞助、K8s赞助、Tortoise ORM 赞助)
+<img src="IMG_1516.JPG" title="微信交流群" alt="微信群定期更新" width="200" height="260" />
