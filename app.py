@@ -1,10 +1,9 @@
 # -*- coding:utf-8 -*-
 """
-@Created on : 2022/4/22 22:02
-@Author: binkuolo
-@Des: app运行时文件
+@Created on : 2022/8/18 13:02
+@Author: Albert
+@Des: app 运行时文件
 """
-
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
