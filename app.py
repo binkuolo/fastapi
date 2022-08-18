@@ -8,14 +8,24 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.sessions import SessionMiddleware
-from config import settings
-from fastapi.staticfiles import StaticFiles
-from core import Exception, Events, Router, Middleware
-from fastapi.templating import Jinja2Templates
-from tortoise.exceptions import OperationalError, DoesNotExist, IntegrityError, ValidationError
-from fastapi.openapi.docs import (get_redoc_html, get_swagger_ui_html, get_swagger_ui_oauth2_redirect_html)
+from fastapi.openapi.docs import (
+    get_redoc_html,
+    get_swagger_ui_html,
+    get_swagger_ui_oauth2_redirect_html,
+)
 from fastapi.openapi.utils import get_openapi
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from starlette.middleware.sessions import SessionMiddleware
+from tortoise.exceptions import (
+    OperationalError,
+    DoesNotExist,
+    IntegrityError,
+    ValidationError,
+)
+
+from config import settings
+from core import Exception, Events, Router, Middleware
 
 application = FastAPI(
     debug=settings.APP_DEBUG,
@@ -35,9 +45,7 @@ def custom_openapi():
         title=settings.PROJECT_NAME,
         routes=app.routes,
     )
-    openapi_schema["info"]["x-logo"] = {
-        "url": "/logo-teal.png"
-    }
+    openapi_schema["info"]["x-logo"] = {"url": "/logo-teal.png"}
     application.openapi_schema = openapi_schema
     return application.openapi_schema
 
@@ -79,8 +87,12 @@ application.add_event_handler("shutdown", Events.stopping(application))
 
 # 异常错误处理
 application.add_exception_handler(HTTPException, Exception.http_error_handler)
-application.add_exception_handler(RequestValidationError, Exception.http422_error_handler)
-application.add_exception_handler(Exception.UnicornException, Exception.unicorn_exception_handler)
+application.add_exception_handler(
+    RequestValidationError, Exception.http422_error_handler
+)
+application.add_exception_handler(
+    Exception.UnicornException, Exception.unicorn_exception_handler
+)
 application.add_exception_handler(DoesNotExist, Exception.mysql_does_not_exist)
 application.add_exception_handler(IntegrityError, Exception.mysql_integrity_error)
 application.add_exception_handler(ValidationError, Exception.mysql_validation_error)
@@ -102,14 +114,14 @@ application.add_middleware(
     SessionMiddleware,
     secret_key=settings.SECRET_KEY,
     session_cookie=settings.SESSION_COOKIE,
-    max_age=settings.SESSION_MAX_AGE
+    max_age=settings.SESSION_MAX_AGE,
 )
 
 # 路由
 application.include_router(Router.router)
 
 # 静态资源目录
-application.mount('/', StaticFiles(directory=settings.STATIC_DIR), name="static")
+application.mount("/", StaticFiles(directory=settings.STATIC_DIR), name="static")
 application.state.views = Jinja2Templates(directory=settings.TEMPLATE_DIR)
 
 app = application
