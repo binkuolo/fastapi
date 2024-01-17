@@ -79,13 +79,23 @@ application.add_event_handler("startup", Events.startup(application))
 application.add_event_handler("shutdown", Events.stopping(application))
 
 # 异常错误处理
+
+# 捕获HTTP异常
 application.add_exception_handler(HTTPException, Exception.http_error_handler)
+# 捕获请求验证错误
 application.add_exception_handler(RequestValidationError, Exception.http422_error_handler)
+# 捕获Unicorn异常
 application.add_exception_handler(Exception.UnicornException, Exception.unicorn_exception_handler)
+# 捕获MySQL异常：记录不存在
 application.add_exception_handler(DoesNotExist, Exception.mysql_does_not_exist)
+# 捕获MySQL异常：完整性错误
 application.add_exception_handler(IntegrityError, Exception.mysql_integrity_error)
+# 捕获MySQL异常：验证错误
 application.add_exception_handler(ValidationError, Exception.mysql_validation_error)
+# 捕获MySQL异常：操作错误
 application.add_exception_handler(OperationalError, Exception.mysql_operational_error)
+
+
 
 # 中间件
 #  添加中间件BaseMiddleware，用于处理全局请求和响应。
