@@ -17,6 +17,7 @@ from tortoise.exceptions import OperationalError, DoesNotExist, IntegrityError, 
 from fastapi.openapi.docs import (get_redoc_html, get_swagger_ui_html, get_swagger_ui_oauth2_redirect_html)
 from fastapi.openapi.utils import get_openapi
 
+# 创建FastAPI应用实例，设置debug模式，并设置doc和redoc页面为None
 application = FastAPI(
     debug=settings.APP_DEBUG,
     docs_url=None,
@@ -86,10 +87,11 @@ application.add_exception_handler(IntegrityError, Exception.mysql_integrity_erro
 application.add_exception_handler(ValidationError, Exception.mysql_validation_error)
 application.add_exception_handler(OperationalError, Exception.mysql_operational_error)
 
-
 # 中间件
+#  添加中间件BaseMiddleware，用于处理全局请求和响应。
 application.add_middleware(Middleware.BaseMiddleware)
 
+#  添加中间件CORSMiddleware，用于处理跨域资源共享（CORS）相关的请求和响应。
 application.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -97,7 +99,7 @@ application.add_middleware(
     allow_methods=settings.CORS_ALLOW_METHODS,
     allow_headers=settings.CORS_ALLOW_HEADERS,
 )
-
+#   添加中间件SessionMiddleware，用于处理HTTP会话。
 application.add_middleware(
     SessionMiddleware,
     secret_key=settings.SECRET_KEY,
@@ -111,7 +113,6 @@ application.include_router(Router.router)
 # 静态资源目录
 application.mount('/', StaticFiles(directory=settings.STATIC_DIR), name="static")
 application.state.views = Jinja2Templates(directory=settings.TEMPLATE_DIR)
-
 
 '''
 fastapi的 state，可以向请求头里放一些东西
