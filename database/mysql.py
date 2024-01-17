@@ -63,3 +63,8 @@ async def register_mysql(app: FastAPI):
         generate_schemas=False,
         add_exception_handlers=False,
     )
+    '''
+        generate_schemas=True  检测数据库中相应表是否存在，是否已经有这个表，如果没有就自动创建这个表，如果有了也不会更改现有的表。
+                                （实测，要先新建 base 数据库才好用）
+        add_exception_handlers=True  开启 mysql 异常信息反馈。
+    '''
